@@ -12,4 +12,4 @@ data = leaguedashplayerstats.LeagueDashPlayerStats(
 
 data_filtered = data[['PLAYER_NAME','PTS', 'AST', 'REB', 'TOV', 'STL', 'BLK', 'FG3A', 'FGA', 'FTA', 'FG3_PCT']]
 
-data_filtered.to_csv('base_data_23-24.csv')
+data_filtered.to_csv('per100_23-24.csv')
