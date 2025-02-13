@@ -27,6 +27,7 @@ def percentileplot():
     data_f = data[data[id_colname] == name].drop(id_colname, axis=1).values.flatten().tolist()
     ax = sns.barplot(data_pct_f)
     ax.set_ylim((0,1))
+    ax.set_ylabel('Percentile')
     [ax.bar_label(con, fontsize=6, labels=[label,]) for con, label in zip(ax.containers,data_f)]
 
 
