@@ -38,6 +38,7 @@ def open_file():
 
 def file_change_housekeeping(): # things we need to do when changing the current_file
     global current_file, df_var, index_cbx
+    wipe_viewer() # might as well?
     df_var = np.ndarray(shape = current_file.shape, dtype=StringVar)
     index_cbx['values'] = [i for i in current_file.index]
     update_viewer()
@@ -125,7 +126,50 @@ def add_row():
     current_file.loc[new_idx, :] = new_row
     file_change_housekeeping()
     index_var.set(new_idx)
+
+def edit_col():
+    t = Toplevel(root)
+    t.title('Edit Column')
+
+    def enter():
+        global current_file
+        new_col = f'{name_ent.get()}..{type_var.get()}'
+        old_col = [col for col in current_file.columns if col.split(sep='..')[0] == col_cbx.get()][0]
+        print({old_col:new_col})
+        current_file = current_file.rename(columns={old_col:new_col})
+        print(current_file)
+        file_change_housekeeping()
+        wipe_viewer()
+        update_viewer()
+        t.destroy()
+
+    col_lbl = Label(t, text='Choose Which Column to Edit:')
+    col_cbx = ttk.Combobox(t, values=[col.split(sep='..')[0] for col in current_file.columns], state='readonly')
     
+    type_var = StringVar(t, value='ent')
+    type_lbl = Label(t, text='Type: ')
+    ent_rdb = ttk.Radiobutton(t, text='Entry', variable=type_var, value='ent')
+    cbx_rdb = ttk.Radiobutton(t, text='Combobox', variable=type_var, value='cbx')
+
+    name_lbl = Label(t, text='Name: ')
+    name_ent = Entry(t)
+
+    enter_btn = Button(t, text='Enter', command=enter)
+    cancel_btn = Button(t, text='Cancel', command=t.destroy)
+
+    col_lbl.grid(column=0, row=0, columnspan=2)
+    col_cbx.grid(column=0, row=1, columnspan=2)
+
+    type_lbl.grid(column=0, row=2, rowspan=2)
+    ent_rdb.grid(column=1, row=2)
+    cbx_rdb.grid(column=1, row=3)
+
+    name_lbl.grid(column=0, row=4)
+    name_ent.grid(column=1, row=4)
+
+    enter_btn.grid(column=0, row=5)
+    cancel_btn.grid(column=1, row=5)
+
 
 ######################### MENUBAR #########################
 
@@ -143,6 +187,7 @@ menu_edit = Menu(menubar)
 menubar.add_cascade(menu=menu_edit, label='Edit')
 menu_edit.add_command(label = 'Add Column', command = add_col)
 menu_edit.add_command(label = 'Add Row', command = add_row)
+menu_edit.add_command(label = 'Edit Column', command = edit_col)
 
 ######################### RIBBON #########################
 
@@ -153,8 +198,16 @@ index_lbl = Label(ribbon, text='Index: ')
 index_cbx = ttk.Combobox(ribbon, textvariable=index_var, values=[0,], width=3, state='readonly')
 index_var.trace_add(mode='write', callback=change_index)
 
-index_cbx.grid(row=0,column=1)
+addcol_btn = Button(ribbon, text='Add\nColumn', command=add_col, width = 10)
+addrow_btn = Button(ribbon, text='Add\nRow', command=add_row, width = 10)
+editcol_btn = Button(ribbon, text='Edit\nColumn', command=edit_col, width = 10)
+
 index_lbl.grid(row=0, column=0)
+index_cbx.grid(row=0,column=1)
+
+addcol_btn.grid(row=0, column=2)
+addrow_btn.grid(row=0, column=3)
+editcol_btn.grid(row=0, column=4)
 
 ######################### VIEWER #########################
 new_file()
@@ -168,6 +221,12 @@ df_var = np.ndarray(shape = current_file.shape, dtype=StringVar)
 
 # current_file = pd.read_csv('C:/Users/theis/Documents/GitHub/Personal-Projects/Daily Planner/test.csv', dtype=object) #TEMP
 # file_change_housekeeping() # TEMP
+
+def wipe_viewer():
+    global viewer
+    viewer.destroy()
+    viewer = ttk.Frame(root, relief='solid', borderwidth=3, padding = "3 3")
+    viewer.grid(column = 0, row = 1, sticky=(N, W))
 
 
 def update_viewer():
@@ -216,3 +275,10 @@ ribbon.grid(column = 0, row = 0, sticky=(N, W))
 viewer.grid(column = 0, row = 1, sticky=(N, W))
 
 root.mainloop()
+
+
+### TODO
+# let it import normal .csv files and add functionality on top
+# add date stepper
+# variable entry/cbx width based on max len *2
+# make index selector a spinbox (or just add up and down arrows)
