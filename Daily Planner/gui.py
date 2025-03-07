@@ -73,7 +73,7 @@ def save_file():
     except Exception as e:
         messagebox.showerror(message=f'An error has occured: {e}')
     
-    print(current_file)
+    # print(current_file) # for troubleshooting
 
 def change_index(x, y, z):
     global index, index_var
@@ -230,11 +230,22 @@ def wipe_viewer():
 
 
 def update_viewer():
-    global viewer, df_var
+    global viewer, df_var, current_path, current_file
     
     count = 0
     for col in current_file:
-        name, typeof = col.split(sep='..')
+        try:
+            name, typeof = col.split(sep='..')
+        except ValueError: # column names are not in correct format, assume .csv doesn't have columns with type baked in 
+            name = col
+            typeof = 'ent'
+            colnamer = lambda col: f'{col}..ent'
+
+            messagebox.showinfo(message='The current file does not have the correct column names. They have been added, make sure to save the file as a new .csv!') # revise this message for concision 
+
+            current_path = '' # blanks the path so save will saveas 
+
+            current_file = current_file.rename(colnamer, axis='columns')
         label = Label(viewer, text=name)
         label.grid(row = 0, column = count)
         
@@ -278,7 +289,7 @@ root.mainloop()
 
 
 ### TODO
-# let it import normal .csv files and add functionality on top
 # add date stepper
 # variable entry/cbx width based on max len *2
 # make index selector a spinbox (or just add up and down arrows)
+# add spreadsheet view
