@@ -1,0 +1,2 @@
+# About
+This project uses data from the U.S. Department of Energy's fuel economy information. The goal of the project is to predict the number of cylinders a car's engine has from the miles per gallon it gets and the vehicle class, and it was a good excuse to learn common machine learning algorithms for multiclass classification.

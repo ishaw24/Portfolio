@@ -28,6 +28,6 @@ def percentileplot():
     ax = sns.barplot(data_pct_f)
     ax.set_ylim((0,1))
     ax.set_ylabel('Percentile')
-    [ax.bar_label(con, fontsize=6, labels=[label,]) for con, label in zip(ax.containers,data_f)]
+    [ax.bar_label(con, fontsize=8, labels=[label,]) for con, label in zip(ax.containers,data_f)]
 
 

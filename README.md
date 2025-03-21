@@ -1,1 +1,2 @@
-# Portfolio
+# About
+This repository is a collection of personal projects of mine, mostly focused around data science, NBA stats, and other related topics. Feel free to check out any project by clicking on an above project folder, each of which has a README detailing the particulars of that project. If you have any questions or inquiries, feel free to contact me at theishaw42@gmail.com.
