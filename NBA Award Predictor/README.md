@@ -1,0 +1,2 @@
+# About
+This project attempts to use previous NBA award data and statistics by season to create a model that gives the probability for some player with some stats to win a selection of awards. Much of the work with this project relates to data collection, which revolves around getting the [player awards](playerawards.py) and [player stats](playerstats.py), while the model creation and iteration is in a [notebook](main.ipynb).
